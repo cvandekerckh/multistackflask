@@ -15,3 +15,6 @@ def make_shell_context():
         'Notification': Notification,
         'Task': Task,
     }
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=80)
