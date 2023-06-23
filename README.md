@@ -2,14 +2,6 @@
 Flask script for website 
 
 # A. Development preparation
-##  Step 0 : download elastic search
-instructions for MAC :
-https://medium.com/@felixgondwe/elasticsearch-setup-using-homebrew-2017891f62bb
-commands:
-- `brew install elasticsearch`
-- `brew services start elasticsearch`
-- test : http://localhost:9200
-
 ##  Step 1 : setting up gmail for password reset
 Create .env file and set environment the following ENV variable
 
@@ -29,29 +21,37 @@ click on https://myaccount.google.com/lesssecureapps and  unlock
 - running `pipenv install`
 
 ## Step 4 : running flask
-- upgrade database : `flask db upgrade`
-- running `flask run`
+- sh boot_develop.sh
 
 # Production Details
-##  Step 1 : ssh connect to instance and prepare environment
-`ssh -i ~/.ssh/gc corentinvdk@104.155.161.68`
-(protect your instance : https://blog.miguelgrinberg.com/)
+Most of the following steps are inspired by Ginberg's tutorial (see tutorial doc) 
+## Step 0 : create a VM instance on GCP
 
-## Step 2 : install environment
-sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
-libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
-sudo apt-get install git
-curl https://pyenv.run | bash
-(following instruction)
-reload shell
-pyenv install --list | grep " 3\.[678]"
-pyenv install -v 3.7.2
-sudo apt-get update
-sudo apt-get -y install mysql-server postfix supervisor nginx git
-Internet Configuration for postfix
-pip install -U pipenv
+##  Step 1 : ssh connect
+ssh connect to instance through GCP
 
+## Step 2 : git pull 
+- sudo apt-get -y update
+- sudo apt-get -y install git
+- generate keys in .ssh folder (ssh-keygen)
+- add keys to github
+- clone repo
+
+## Step 3 : create docker environment (https://docs.docker.com/engine/install/debian/)
+Check whether you're debian or ubuntu
+- sudo apt install -y make
+
+## Step 4 : try to access app externally (firewall)
+https://amanranjanverma.medium.com/run-flask-app-on-gcp-compute-engine-vm-instance-de4aea60a6fe
+
+- create a network tag (allow-80)
+- Go https://console.cloud.google.com/networking/firewalls/
+- create firewall rule (http-allow-80)
+- add tag (allow-80)
+- specify TCP (port 80)
+- look at externel IP adress
+
+(obsolete)
 # Step 3 : prepare .env
 SECRET_KEY=(gen by python -c "import uuid; print(uuid.uuid4().hex)")
 MAIL_SERVER=localhost
